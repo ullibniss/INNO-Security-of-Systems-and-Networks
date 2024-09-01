@@ -1,7 +1,7 @@
 # Lab 1. Classical Crypto
 
 
-## Done by Fedorov Alexey ([Telegram](https://t.me/ullibniss), [Github](https://github.com/ullibniss/))
+## Done by Fedorov Alexey (<a href="https://t.me/ullibniss"><img src="https://upload.wikimedia.org/wikipedia/commons/8/83/Telegram_2019_Logo.svg" width="40"></img></a><a href="https://github.com/ullibniss/"><img src="https://user-images.githubusercontent.com/25181517/192108374-8da61ba1-99ec-41d7-80b8-fb2f7c0a4948.png" alt="drawing" width="40"></img></a>)
 
 ---
 
