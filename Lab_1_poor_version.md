@@ -3,7 +3,7 @@
 
 ## Done by Fedorov Alexey ([Telegram](https://t.me/ullibniss), [Github](https://github.com/ullibniss/))
 
-### It's better to review rich report version with Gifs on [Github](https://github.com/ullibniss/INNO-Security-of-Systems-and-Networks/blob/master/Lab_1_rich_version.md).
+### It's better to review rich report version with Gifs on [Github](https://github.com/ullibniss/INNO-Security-of-Systems-and-Networks/blob/master/Lab_1_rich_version.md). Poor version purpose to be convertable to PDF.
 
 ---
 
