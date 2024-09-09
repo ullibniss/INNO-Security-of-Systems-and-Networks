@@ -6,8 +6,7 @@
 
 ## Prerequisits
 
-![video-33](https://github.com/user-attachments/assets/5a388d92-7516-41a5-9275-cea34a923021)
-
+![Figure 0](https://github.com/user-attachments/assets/5c1376a3-fd65-4279-93ad-a74080eefd08)
 
 ## Task 1. Firmware Databases
 
