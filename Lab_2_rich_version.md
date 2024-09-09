@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/a81b4347-64c4-45c2-bdd6-bc8949b5a3df)# Lab-2: UEFI-Secure-Boot
+# Lab-2: UEFI-Secure-Boot
 
 ## Done by Fedorov Alexey
 
@@ -22,6 +22,7 @@ Then I use efi-readvar to get the certificate:
 
 `efi-readvar -v KEK -o old_kek.esl`
 
+![image](https://github.com/user-attachments/assets/ff25ff17-5c06-4bf2-a0f1-4c5a2701c141)
 
 
 efi-readvar - tool for showing secure variables.
@@ -30,14 +31,15 @@ The efitools package also contains the `sig-list-to-certs` tool that allows to e
 
 `sig-list-to-certs old_kek.esl oldkek`
 
+![image](https://github.com/user-attachments/assets/e916b77c-cdfb-4d20-bf83-e01a9cfb0f01)
+
 Now I can see the certificate with the command:
 
 `openssl x509 -in oldkek-0.der -inform der -noout -text` (Figures 1 and 2).
 
-![Figure 1 - KEK certificate (part 1)](https://i.imgur.com/2jgAKgp.png)  
+![image](https://github.com/user-attachments/assets/2da562ce-cb15-4056-94d2-609dab899b8a)
 
-
-![Figure 2 - KEK certificate (part 2)](https://i.imgur.com/SVLIyFd.png)  
+![image](https://github.com/user-attachments/assets/91f18c08-c357-4d4d-add5-30aacc9b8ee1)
 
 
 ### 1.2.  Is this certificate the root certificate in the chain of trust? What is the role of the Platform Key (PK) and other variables?
@@ -61,57 +63,35 @@ The first X509 certificate in the chain is authenticated against values burnt in
 
 For this purpose, I used the efibootmgr - tool for manipulating the UEFI Boot Manager (Figure 3)
 
-![Figure 3 - efibootmgr -v](https://i.imgur.com/6YRyq9e.png)  
+![image](https://github.com/user-attachments/assets/893c56fe-d481-4391-82fe-c37a3967d737)
 
-
-Boot order started with 0001 - ubuntu, which has a bootloader shim, that is located at `/boot/efi/EFI/ubuntu/shimx64.efi`.
+Boot order started with 0000 - ubuntu, which has a bootloader shim, that is located at `/boot/efi/EFI/ubuntu/shimx64.efi`.
 
 
 ### 2.4.  Verify that the shim bootloader is indeed signed with the “Microsoft Corporation UEFI CA” key. Hint: sbsigntool, PEM format
 
 I can see a list of all signatures using the command `sbverify --list` as shown in Figure 4.
 
-![Figure 4 - List of signatures](https://i.imgur.com/xEx4ZDi.png)  
+![image](https://github.com/user-attachments/assets/a97eaffc-3d3c-4912-bde7-3b1e210f5494)
 
 
 To verify the shim bootloader I need a PEM certificate.
 
-I wanted to get it by converting the certificate from the previous task with the following command: `openssl x509 -inform der -in oldkek-0.der -out certificate.pem`
-
-But it doesn’t work, so I have to extract the certificate from my system.
-
 So first I extract the keys from the signature database by using `mokutil --export --db`. As a result, I received six files in der format (Figure 5).
 
-![Figure 5 - Certificates from the signature database](https://i.imgur.com/eFUR92h.png)  
-
+![image](https://github.com/user-attachments/assets/f4f43e89-ce71-4600-9b9a-1b42d8af24cf)
 
 Then I converted them to pem format as shown below.
 
-    for derfile in ./*.der; do
-    > openssl x509 -inform der -outform pem -in "$derfile" -out "${derfile}.pem"
-    >done
-    rename 's/.der.pem$/.pem/' ./*.der.pem
-    
+![image](https://github.com/user-attachments/assets/cacc0557-7a46-4f3c-b1af-478bd34b9fe0)
 
-Now they are all in pem format. To find the right one, I use the commands :
+Now let's print the common names from the certificates. Figure 6 shows the result of executing commands.
 
-    for pemfile in ./*.pem; do
-    >echo "$pemfile"
-    >openssl x509 -inform pem -in "$pemfile" -text | egrep 'CN ?='
-    >done
-    
-
-It will print the common names from the certificates. Figure 6 shows the result of executing commands.
-
-![Figure 6 - The common names from the certificates](https://i.imgur.com/gPJSOKr.png)  
-
+![image](https://github.com/user-attachments/assets/e32506a9-6c71-4e8d-b6a1-28d1084f12a4)
 
 It looks like DB-0003.pem is what I need. So let’s give it a try (Figure 7).
 
-![Figure 7 - Verifying the shim bootloader](https://i.imgur.com/NEVsocy.png)  
-
-
-* * *
+![image](https://github.com/user-attachments/assets/090c5e70-e529-42e6-ab9b-b754f795cc14)
 
 ### 2.5.  What is the exact name of the part of the binary where the actual signature is stored?
 ### 2.6.  In what standard cryptographic format is the signature data stored?
@@ -133,16 +113,13 @@ So first I downloaded it (`curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --o
 After that I will be able to install modules for python 2 - `sudo python2 -m pip install capstone`.  
 Now I can analyze the shim (Figures 8 and 9): `sudo python2 pyew.py /boot/efi/EFI/ubuntu/shimx64.efi`.
 
-![Figure 8 - Analyzing shimx64.efi](https://i.imgur.com/jCc21Hy.png)  
+![image](https://github.com/user-attachments/assets/c3e98bf1-1986-43a0-bbb7-fde36e2899b1)
 
-
-![Figure 9 - Ready to go](https://i.imgur.com/u7Q7ROA.png)  
-
+![image](https://github.com/user-attachments/assets/0f7309b8-017e-4a08-bd57-579b52c85c1f)
 
 Now I need to get a list of all the data directory entries (Figure 10).
 
-![Figure 10 - List of the data directory entries](https://i.imgur.com/ZMfTjXH.png)  
-
+![image](https://github.com/user-attachments/assets/208086f7-128d-4925-b04a-10910a34eca3)
 
 I need to extract  
 `<Structure: [IMAGE_DIRECTORY_ENTRY_SECURITY] 0x128 0x0 VirtualAddress: 0xE73C8 0x12C 0x4 Size: 0x2140>`.
@@ -150,55 +127,52 @@ I need to extract
 To see it in a more human-readable format, I use  
 `print pyew.pe.OPTIONAL_HEADER.DATA_DIRECTORY[4]`. Figure 11 shows the result.
 
-![Figure 11 - Directory security entry](https://i.imgur.com/zeybHKh.png)  
+![image](https://github.com/user-attachments/assets/2815fe0a-dbd1-45e8-b5d8-e6fe03c8a58f)
 
 
-0xE73C8 - 947144. But I’m skipping the Microsoft WIN certificate structure header, so it will be 947144 + 8 = 947152.
 
-0x2140 - 8512. But I need 8512-8 = 8504 bytes.
+0xE73C8 - 950896. But I’m skipping the Microsoft WIN certificate structure header, so it will be 950896 + 8 = 950904.
+
+0x2140 - 9576. But I need 9576-8 = 9568 bytes.
 
 Now let’s extract the signature data from the shim binary using dd.
 
-`sudo dd if=/boot/efi/EFI/ubuntu/shimx64.efi bs=1 count=8504 skip=947152 > signature`.
+`sudo dd if=/boot/efi/EFI/ubuntu/shimx64.efi bs=1 count=9568 skip=950904 > signature`.
+
+![image](https://github.com/user-attachments/assets/69b3493b-619b-4e9f-996e-180eb51e78bd)
 
 Figure 12 shows the part of this file.
 
-![Figure 12 - Part of signature data](https://i.imgur.com/XfGT2nq.png)  
-
+![image](https://github.com/user-attachments/assets/4558c3b5-5254-4cb2-b9bf-b15f4449a281)
 
 ### 2.8.  Show the subject and issuer of all X.509 certificates stored in the signature data. Draw a diagram relating these certificates to the “Microsoft Corporation UEFI CA” certificate.
 
 I used dumpasn1 to view the data as shown in Figure 13.
 
-![Figure 13 - Signature in ASN.1](https://i.imgur.com/q0pbqTC.png)  
-
+![image](https://github.com/user-attachments/assets/b70410a0-266f-46fc-9819-e1fe08224e00)
 
 So now I can compare this data with the example in the specification and find the information I need. It contains two certificates.
 
 Here is issuer information, including sha256WithRSA signature, certificate issuer Microsoft Corporation UEFI CA 2011, organization Microsoft Corporation, country, and province (Figure 14).
 
-![Figure 14 - The issuer of the first certificate](https://i.imgur.com/SV8lL2o.png)  
-
+![image](https://github.com/user-attachments/assets/f0ce8606-e73b-49a5-9f2b-691d380cd7d0)
 
 Each piece of data usually has a tag variable, which corresponds to a related value.
 
 Here is a subject with the same type of information as the issuer (Figure 15).
 
-![Figure 15 - The subject of the first certificate](https://i.imgur.com/f9G0dtj.png)  
-
+![image](https://github.com/user-attachments/assets/ceedd90e-b320-4ee2-9d00-540a89ec6d3c)
 
 Figure 16 and 17 show the issuer and subject for the second certificate.
 
-![Figure 16 - The issuer of the second certificate](https://i.imgur.com/S90ltN6.png)  
+![image](https://github.com/user-attachments/assets/0ce461ff-ac79-4669-a107-50f4c29a741a)
 
-
-![Figure 17 - The subject of the second certificate](https://i.imgur.com/2Sv3kEM.png)  
+![image](https://github.com/user-attachments/assets/3ef76378-73d2-44f6-a731-a9453b9d8f2c)
 
 
 The relationship between certificates is shown in Figure 18.
 
-![figure 18 - Chain of trust](https://i.imgur.com/sa0D2xw.png)  
-
+![image](https://github.com/user-attachments/assets/2c5546f0-e79a-4b8a-8da5-31f8d9879305)
 
 The shim does not contain a Microsoft root certificate.  
 Microsoft Corporation UEFI CA 2011 is used by Microsoft to sign non-Microsoft UEFI bootloaders. They offer to sign EFI binaries which have passed their review with Microsoft Windows UEFI Driver Publisher key for 3rd party drivers.
@@ -209,19 +183,20 @@ Microsoft Corporation UEFI CA 2011 is used by Microsoft to sign non-Microsoft UE
 
 Well, I analyzed the `grubx64.efi` file with pyew and got information about the signatures (Figure 19).
 
-![Figure 19 - Information about the signatures](https://i.imgur.com/kuOLXeA.png)  
+![image](https://github.com/user-attachments/assets/457712f3-cfe7-40ac-be6e-a3310da9c994)
 
-I have to skip `0x1A7000 - 1732608 + 8 = 1732616` bytes and then got `0x780 - 1920 -8 = 1912` bytes, which is the signature data.
+![image](https://github.com/user-attachments/assets/5406a7e2-be04-4c55-9a39-429813afc983)
+
+I have to skip `0x27A000 - 2596864 + 8 = 2596872` bytes and then got `0x780 - 1928 -8 = 1920` bytes, which is the signature data.
 
 Let’s extract this as grub\_sig  
-`sudo dd if=/boot/efi/EFI/ubuntu/grubx64.efi bs=1 count=1912 skip=1732616 > grub_sig`.
+`sudo dd if=/boot/efi/EFI/ubuntu/grubx64.efi bs=1 count=1920 skip=2596872 > grub_sig`.
 
 Then I converted hex to ASN.1 using dumpasn1. There is only one certificate. Its subject and issuer are shown in Figures 20 and 21.
 
-![Figure 20 - The issuer](https://i.imgur.com/loLGtN9.png)  
+![image](https://github.com/user-attachments/assets/d0ef6a20-09bc-458a-a305-9dd0cc1afb90)
 
-
-![Figure 21 - The subject](https://i.imgur.com/ZuipQxe.png)  
+![image](https://github.com/user-attachments/assets/82d69762-4e2b-47f9-8d55-191f122e8d48)
 
 ### 2.10.  Why is storing the certificate X in the shim binary secure?
 
@@ -238,15 +213,16 @@ Certificate X should be part of the chain of trust, so I think the common name o
 *   DER/ASN.1 leaves the CommonName readable
 *   The certificate is 1080 bytes long
 
-I’m going to get a certificate from a binary file. To do this, I downloaded OpenCorePkg and copied the shim-to-cert.tool from it. I extract the signing certificate from the shell file using the following command `sudo sh shim-to-cert.tool /boot/efi/EFI/ubuntu/shimx64.efi`.
+I’m going to get a certificate from a binary file. To do this, I downloaded OpenCorePkg and copied the shim-to-cert.tool from it. I extract the signing certificate from the shell file using the following command `sudo bash ./Utilities/ShimUtils/shim-to-cert.tool /boot/efi/EFI/ubuntu/shimx64.efi`.
 
 As a result, I got `CanonicalLtd.MasterCertificateAuthority.pem` certificate (Figure 22) and `vendor.dbx`.
 
-![Figure 22 - X certificate in pem format](https://i.imgur.com/Xijods0.png)  
+![image](https://github.com/user-attachments/assets/64e5be90-68b7-4cb0-a4d2-169d674345ba)
+
 
 So my idea of the common name of the subject was correct. But the format of this certificate is pem, and its size is 1517. Let’s convert it to der: `openssl x509 -inform pem -outform der -in CanonicalLtd.MasterCertificateAuthority.pem -out cert.der`. Figure 23 shows the result.
 
-![Figure 23 - X certificate in pem format](https://i.imgur.com/rP14dJq.png)  
+![image](https://github.com/user-attachments/assets/367333f3-8e30-401c-8cdd-073a8b200036)
 
 Now its size is correct. So yes, it’s an X certificate.
 
@@ -255,8 +231,7 @@ Now its size is correct. So yes, it’s an X certificate.
 
 To do this, I need to use dbverify as shown in Figure 24.
 
-![Figure 24 - Verifying a GRUB binary with the X certificate](https://i.imgur.com/1clk4sb.png)  
-
+![image](https://github.com/user-attachments/assets/30dc2454-0e42-4602-b3e7-91669f6fc322)
 
 Thus, the corresponding private key of certificate X was indeed used to sign the GRUB binary.
 
@@ -266,10 +241,7 @@ Thus, the corresponding private key of certificate X was indeed used to sign the
 
 the kernel is a vmlinuz file. To verify it, I need to use dbverify as shown in Figure 25.
 
-![Figure 25 - Verifying the kernel with an X certificate](https://i.imgur.com/UsGkUcQ.png)  
-
-
-* * *
+![image](https://github.com/user-attachments/assets/916ea2f9-2f9a-4662-b0c3-0e77c7e64162)
 
 ### 2.15.  BONUS: Where does GRUB get its trusted certificate from? Hint: It is not stored in the binary, and it is not stored on the file system.
 
@@ -277,43 +249,46 @@ Ubuntu’s Shim includes Canonical’s public key, which validates Ubuntu’s GR
 
 Here is the data directory with the certificate in the kernel in Figure 26.
 
-![Figure 26 - Information about the signatures](https://i.imgur.com/0Gl8Nua.png)  
+![image](https://github.com/user-attachments/assets/997826c8-f3a9-410f-bc7e-b543e43d5b13)
 
-
-0x9AABE0 - 10136544 + 8 = 10136552 bytes  
-0x780 - 1920 - 8 = 1912 bytes
+0x9AABE0 - 14926336 + 8 = 14926344 bytes  
+0x780 - 1928 - 8 = 1920 bytes
 
 I got this using the dd command:  
-`sudo dd if=/boot/vmlinuz-5.11.0-38-generic bs=1 count=1912 skip=10136552 > kernel`.
+`sudo dd if=/boot/efi/EFI/ubuntu/grubx64.efi bs=1 count=1920 skip=14926344 > kern_sig`.
+
+![image](https://github.com/user-attachments/assets/09913da2-84a1-4cf0-97a6-09f3a2b6346e)
 
 Its subject and issuer are shown in Figures 27 and 28.
 
-![Figure 27 - The issuer](https://i.imgur.com/TtYoB7l.png)  
+![image](https://github.com/user-attachments/assets/5bf0a82c-fd17-46af-8115-6d5aaaf22d5e)
 
-
-![Figure 28 - The subject](https://i.imgur.com/NQcBKGn.png)  
+![image](https://github.com/user-attachments/assets/dd837202-8e95-4de3-9815-f03cca49589a)
 
 This is the same as the X certificate.
 
-Now let’s check the modules. I can see them with command `find /lib/modules/$(uname -r) -name *.ko`. It shows the modules for the current kernel version. There are a lot of them - 5843.
+Now let’s check the modules. I can see them with command `find /lib/modules/6.8.0-40-generic -name "*" | wc -l`. It shows the modules for the current kernel version. There are a lot of them - 7718.
 
-I choose the following module to test - `/lib/modules/5.11.0-38-generic/kernel/fs/nfs/nfs.ko`. Figure 29 shows information about this.
+![image](https://github.com/user-attachments/assets/3e5cedf3-aaf1-4f05-9b88-2035f50a8dcc)
 
-![Figure 29 - Information about the nfs.ko kernel module](https://i.imgur.com/mbRdzDX.png)  
+I choose the following module to test - `/lib/modules/6.8.0-40-generic/misc/vboxdrv.ko`. Figure 29 shows information about this.
 
+![image](https://github.com/user-attachments/assets/a2a3b5db-3c85-46ab-ad21-bc967b07aff9)
 
 I extracted the module signature using [extract-module.sig.pl](http://extract-module.sig.pl) script from the kernel source (Figure 30):
 
-`sudo /usr/src/linux-hwe-5.11-headers-5.11.0-38/scripts/extract-module-sig.pl -s /lib/modules/5.11.0-38-generic/kernel/fs/nfs/nfs.ko > res`
+`perl /usr/src/linux-headers-6.8.0-40-generic/scripts/extract-module-sig.pl -s /lib/modules/6.8.0-40-generic/misc/vboxdrv.ko > res`
 
-![](https://i.imgur.com/WhRYHzy.png)  
+![image](https://github.com/user-attachments/assets/9374029f-18b4-4bb3-a411-63fc26c9183a)
+
 Figure 30 - The module signature
 
 To verify this, I need a certificate and a public key from the kernel.
 
 I already have a certificate from the shim, but I still need the public key. So I extract it from the certificate `openssl x509 -pubkey -noout -inform pem -in CanonicalLtd.MasterCertificateAuthority.pem -out pubkey` (Figure 31).
 
-![](https://i.imgur.com/KatfgB7.png)  
+![image](https://github.com/user-attachments/assets/22afc050-2b51-4ccd-856f-e733de377ee1)
+  
 Figure 31 - The public key
 
 The next step is to verify the signature using openssl.
@@ -328,21 +303,13 @@ OpenSSL rsautl is used to verify the encrypted signature. Here’s an explanatio
 *   `< sig` - read sig to the input of this command
 *   `> verified.bin` redirect the output of this command to the file verified.bin
 
-The file created by decrypting the encrypted signature will contain the message digest and associated information. But I got an error message from RSA.  
-Also, I see that the module is signed (Figure 32)
-
-![Figure 32 - Module is signed](https://i.imgur.com/hwa7QXo.png)  
-
-Signed kernel modules have `~Module signature appended~` at the end.
-
-* * *
+The file created by decrypting the encrypted signature will contain the message digest and associated information. But I got an error message from RSA.  Signed kernel modules have `~Module signature appended~` at the end.
 
 ### 2.16.  Draw a diagram that shows the chain of trust from the UEFI PK key to the signed kernel. Show all certificates, binaries and signing relations involved.
 
 Figure 33 shows the chain of trust.
 
 ![Figure 33 - The chain of trust](https://i.imgur.com/ck7Rpwk.png)  
-
 
 Explanations to this diagram were given in different tasks of the report, so I will not repeat.
 
