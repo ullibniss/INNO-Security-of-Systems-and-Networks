@@ -232,5 +232,11 @@ It works :) (Figure 8)
 
 ![Figure 8](https://github.com/user-attachments/assets/2277f5f5-3dfe-49e1-af82-896aa23d2a10)
 
+# References
 
-
+- [OpenSSL Reference: rsa](https://docs.openssl.org/1.1.1/man1/rsa/)
+- [OpenSSL Reference: rsautl](https://docs.openssl.org/1.1.1/man1/rsautl/)
+- [OpenSSL Reference: genrsa](https://docs.openssl.org/1.1.1/man1/genrsa/)
+- [Dcode cipher identifier](https://www.dcode.fr/cipher-identifier)
+- [Dcode Vigerene](https://www.dcode.fr/vigenere-cipher)
+- [RSA](https://en.wikipedia.org/wiki/RSA_(cryptosystem))
