@@ -126,9 +126,9 @@ Hints: study the RSA algorithm. What private information can two keys
 share? What practical attacks exist? You may have to write or use existing
 code for simple arithmetic operations. Be careful with bigInt values!
 ```
-I used dcode.fr to decrypt file with keys. It was Vigenere Cipher, my number is 9.
+I used dcode.fr to decrypt file with keys. It was Vigenere Cipher, my number is 9. (Figure 6)
 
-![image](https://github.com/user-attachments/assets/6053cb1a-ac22-435b-a569-105a6005e23c)
+![Figure 6](https://github.com/user-attachments/assets/6053cb1a-ac22-435b-a569-105a6005e23c)
 
 My keys are:
 
@@ -166,9 +166,9 @@ if not reminder1 and not reminder2:
 
 It converts hex to int, then calculating greatest common devider, then counts other factors. Finally is checks if reminders equals to zero.
 
-Result:
+Result (Figure 7):
 
-![image](https://github.com/user-attachments/assets/f1f32fb9-721b-4dc7-857a-caf3428eeeb4)
+![Figure 7](https://github.com/user-attachments/assets/f1f32fb9-721b-4dc7-857a-caf3428eeeb4)
 
 ## Task 5
 
@@ -221,16 +221,16 @@ KGp1ufeCmCCvjUzl2wIDAQAB
 -----END PUBLIC KEY-----
 ```
 
-Base64 version on encrypted name: 
+Base64 version of encrypted name: 
 
 `Rr4yXIsDNb74vudazc10N8JfaUaNGakfGGRSa644NoVcb0C1cLcF25eVnGa8VcmUv93ccMiw0UO7
 EHXyGT5kVluW6XtqAqA9HH+wmjSne/HwEu9yFI3VGhWyUrgSvtLSq6lgA50gmKTc66X06BxpuJCZ
 fmBszfjUqdEfGJVWiuc=`
 
 
-It works :)
+It works :) (Figure 8)
 
-![image](https://github.com/user-attachments/assets/2277f5f5-3dfe-49e1-af82-896aa23d2a10)
+![Figure 8](https://github.com/user-attachments/assets/2277f5f5-3dfe-49e1-af82-896aa23d2a10)
 
 
 
