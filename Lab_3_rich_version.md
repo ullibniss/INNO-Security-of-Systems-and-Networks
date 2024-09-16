@@ -1,6 +1,6 @@
 # SSN. Lab 3: RSA
 
-## Done by Fedorov Alexey
+## Done by Fedorov Alexey ([Telegram](https://t.me/ullibniss), [Github](https://github.com/ullibniss/))
 
 ---
 
