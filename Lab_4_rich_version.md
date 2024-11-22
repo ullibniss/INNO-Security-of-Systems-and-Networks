@@ -73,7 +73,7 @@ The PEM passphrase set when creating the CA will be asked for every time you nee
 
 ### 2.c Generate Diffie Hellman parameters and key pair for the server. Show the location(path) of the key pair generated.
 
-Let's generate key pair for server
+Let's generate key pair for server.
 
 ```
 ./easyrsa gen-req fedorov_alexey_server nopass
@@ -91,7 +91,7 @@ Now I create Diffie-Hellman parameter for server
 
 ### 2.d What is the size of the Diffie Hellman parameters and their locations?
 
-Size of the Diffie Hellman is 2048 bits
+Size of the Diffie Hellman is 2048 bits.
 
 ```
 /etc/openvpn/easy-rsa/pki/dh.pem
@@ -100,7 +100,7 @@ Size of the Diffie Hellman is 2048 bits
 ![image](https://github.com/user-attachments/assets/3c3634c8-f3ff-429b-a883-812777c7e20a)
 
 
-Documentation recommends to move files to `/etc/openvpn` :
+Documentation recommends to move files to `/etc/openvpn`.
 
 ```
 cp pki/dh.pem pki/ca.crt pki/issued/myservername.crt pki/private/myservername.key /etc/openvpn/
@@ -110,7 +110,7 @@ cp pki/dh.pem pki/ca.crt pki/issued/myservername.crt pki/private/myservername.ke
 
 ### 2.e Create a certificate for the server. What is the commonName value, and how many days are the certificates signed on the server?
 
-Finally I create certificate for the server
+Finally I create certificate for the server.
 
 ```
 ./easyrsa sign-req server fedorov_alexey_server
@@ -118,7 +118,7 @@ Finally I create certificate for the server
 
 ![image](https://github.com/user-attachments/assets/011d54b3-4b1c-41e9-a09a-83cfe8b6a350)
 
-Certificate signed for 825 days
+Certificate signed for 825 days.
 
 **commonName**
 ```
@@ -128,7 +128,7 @@ commonName = fedorov_alexey_server
 
 ### 2.f Create a key for the client and also a client certificate. What is the expiration date of the certificate?
 
-Let's create client key pair
+Let's create client key pair.
 
 ```
 ./easyrsa gen-req fedorov_alexey_client nopass
@@ -136,7 +136,7 @@ Let's create client key pair
 
 ![image](https://github.com/user-attachments/assets/03481c2c-a280-4612-b44a-88220dcca464)
 
-And client certificate too
+And client certificate too.
 
 ```
 ./easyrsa sign-req client fedorov_alexey_client
@@ -144,7 +144,7 @@ And client certificate too
 
 ![image](https://github.com/user-attachments/assets/e7a02b0e-a921-4e1d-953e-3459d23caf8f)
 
-Certificate expiration date is `Dec 20 20:08:45 2026`
+Certificate expiration date is `Dec 20 20:08:45 2026`.
 
 ![image](https://github.com/user-attachments/assets/321b6e62-f88c-4ac5-916e-a578178e15cb)
 
@@ -163,19 +163,19 @@ It is essential for openvpn because it creates additional nessesary security lev
 
 ### 3.b Generate TLS Authentication (server) and show the server key information
 
-To generate tls key for server i created server config from server.conf.gz
+To generate tls key for server i created server config from server.conf.gz.
 
 ![image](https://github.com/user-attachments/assets/c12a0683-c732-4f15-96b7-16047f3b2bfc)
 
-Then I changed this file in the following way:
+Then I changed this file in the following way.
 
 ![image](https://github.com/user-attachments/assets/4d9dad79-4adc-47be-9702-43b86c17638a)
 
-This config provides my key and certificate to server to generate TLS Auth key. Lets generate it:
+This config provides my key and certificate to server to generate TLS Auth key. Lets generate it.
 
 ![image](https://github.com/user-attachments/assets/3d60f28c-0a38-4e7a-b591-1177e024ad53)
 
-Generated key information
+Generated key information.
 
 ![image](https://github.com/user-attachments/assets/38ceff0c-25d0-455a-b058-3ccb8619a17f)
 
@@ -207,7 +207,7 @@ Connection established!
 
 ### 4.b  Using a traffic sniffer like Wireshark, inspect the interface of the VPN traffic. Show the information about this traffic.
 
-I opened wireshark and chose tun1 interface. Here we can see traffic throuh the tunnel.
+I opened wireshark and chose tun1 interface. Here we can see traffic through the tunnel.
 
 ![image](https://github.com/user-attachments/assets/7e762d97-9ea0-4d53-b56a-0c1581b01e11)
 
