@@ -4,6 +4,33 @@
 
 ---
 
+## Task 1
+
+### What is PKI, and what is the purpose of PKI with OpenVPN?
+
+**PKI (Public Key Infrastructure)** - is a framework of policies, procedures, and technologies that enables secure communication and authentication over a network. It uses cryptographic techniques such as asymmetric encryption, digital certificates, and certificate authorities (CAs) to establish trust between entities.
+
+In OpenVPN, PKI ensures secure communication between clients and servers by:
+
+1. **Authentication** - verifying the identity of the server and clients using digital certificates.
+2. **Confidentiality** - encrypting communication so that only intended parties can read the data.
+3. **Integrity** - ensuring transmitted data has not been tampered with using digital signatures.
+4. **Non-repudiation** - preventing either party from denying their involvement in the communication.
+
+Using PKI in OpenVPN, each client and server has its own certificate and private key, while a trusted CA validates these certificates to establish trust.
+
+### Distinguish between a master certificate authority and a separate certificate authority
+
+1. **Master Certificate Authority** - is the root of trust in the PKI hierarchy. It creates and signs the root certificate, which is used to issue or validate all other certificates. Master CA typically kept offline or in a highly secure environment to protect its private key, as its compromise would invalidate the entire PKI structure.
+
+2. **Separate Certificate Authority (CA)** - is delegated authority from the master CA to issue certificates for clients, servers, or subordinate entities. Its private key is signed by the master CA, making its certificates trusted. It also allows operational flexibility, as the master CA remains offline while the intermediate CA handles day-to-day certificate issuance and management.
+
+### **Additional Context (NB Case):**
+
+- **Private Key** - each client has a unique private key corresponding to their certificate.
+- **Public Key** - the public key is part of the client’s certificate and is used for encryption and verification.
+- **Certificate Signing** - The master CA signs both the server and client certificates, ensuring trust in the entire PKI chain. The separate CA, if used, may handle the task of issuing individual client or server certificates, reducing the risk of exposing the master CA's private key.
+
 ## Task 2 - Set-Up
 
 ### 2.a Install, build, and initialize a Public Key Infrastructure for an installed OpenVPN.
