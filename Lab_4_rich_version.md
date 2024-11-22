@@ -163,6 +163,55 @@ It is essential for openvpn because it creates additional nessesary security lev
 
 ### 3.b Generate TLS Authentication (server) and show the server key information
 
+To generate tls key for server i created server config from server.conf.gz
 
+![image](https://github.com/user-attachments/assets/c12a0683-c732-4f15-96b7-16047f3b2bfc)
+
+Then I changed this file in the following way:
+
+![image](https://github.com/user-attachments/assets/4d9dad79-4adc-47be-9702-43b86c17638a)
+
+This config provides my key and certificate to server to generate TLS Auth key. Lets generate it:
+
+![image](https://github.com/user-attachments/assets/3d60f28c-0a38-4e7a-b591-1177e024ad53)
+
+Generated key information
+
+![image](https://github.com/user-attachments/assets/38ceff0c-25d0-455a-b058-3ccb8619a17f)
 
 ### 3.c. Generate a TLS Authentication key (client) and show the client key information
+
+Client uses the same ta.key as server. The one thing we need in production environment is secure transport for TLS key.
+
+Lets copy file in client directory.
+
+![image](https://github.com/user-attachments/assets/7e69317e-6378-42fd-a664-c767f73aa7c5)
+
+The final step is to configure client.
+
+![image](https://github.com/user-attachments/assets/61d290b9-f277-4fc9-9f0f-4a77ccfaaec6)
+
+## Task 3. Verification
+
+### 4.a Simulate a communication between the OpenVPN server and the and client.
+
+Lets simulate connection. To apply configuration for server I have to reboot it.
+
+![image](https://github.com/user-attachments/assets/9941fe93-a95f-4b5e-babc-dbca642ac85c)
+
+Now I try to connect to server.
+
+![image](https://github.com/user-attachments/assets/47b16f0a-58c9-46b9-bc19-e4913da97b5b)
+
+Connection established!
+
+### 4.b  Using a traffic sniffer like Wireshark, inspect the interface of the VPN traffic. Show the information about this traffic.
+
+I opened wireshark and chose tun1 interface. Here we can see traffic throuh the tunnel.
+
+![image](https://github.com/user-attachments/assets/7e762d97-9ea0-4d53-b56a-0c1581b01e11)
+
+## References
+
+- https://ubuntu.com/server/docs/how-to-install-and-use-openvpn
+
